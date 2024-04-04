@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,4 +26,28 @@ public class WidgetService {
     return widgetRepository.findAll();
   }
 
+  public Widget getWidgetById(String id){
+    Optional<Widget> widget =  widgetRepository.findById(id);
+      return widget.orElse(null);
+  }
+
+  public Widget addWidget(Widget widget){
+    return widgetRepository.save(widget);
+  }
+
+  public Widget updateWidget(String id, Widget widget){
+    Optional<Widget> widgetToUpdate = widgetRepository.findById(id);
+    if (widgetToUpdate.isPresent()) {
+      Widget _widget = widgetToUpdate.get();
+      _widget.setDescription(widget.getDescription());
+      _widget.setPrice(widget.getPrice());
+      return widgetRepository.save(_widget);
+    } else {
+      return null;
+    }
+  }
+
+  public List<Widget> deleteWidget(String id){
+    return widgetRepository.deleteById(id);
+  }
 }
